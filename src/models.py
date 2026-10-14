@@ -46,6 +46,12 @@ class Cart:
     items: list[CartItem] = field(default_factory=list)
 
     def add(self, product: Product, quantity: int = 1) -> None:
+    # Шукаємо, чи є вже такий товар у кошику
+        for item in self.items:
+            if item.product.product_id == product.product_id:
+                item.quantity += quantity
+            return
+    # Якщо немає — додаємо новий
         self.items.append(CartItem(product, quantity))
 
     def __len__(self) -> int:
@@ -56,4 +62,7 @@ class Cart:
 
     @property
     def total(self) -> Money:
-        return Money(sum(i.total.amount for i in self.items))
+        if not self.items:
+            return Money(0.0) # Порожній кошик коштує 0
+    # Починаємо сумувати з першого елемента, що змусить Python викликати __add__ з класу Money
+        return sum((i.total for i in self.items[1:]), start=self.items[0].total)
