@@ -33,5 +33,5 @@ def load_config(path: Path) -> dict:
     return {
         "min_stock": int(data.get("min_stock", DEFAULT_MIN_STOCK)),
         "currency": str(data.get("currency", "UAH")),
-        "categories": list(data.get("categories", [])),
+        "categories": list(data.get("categories") or []),
     }

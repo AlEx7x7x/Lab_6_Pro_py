@@ -51,7 +51,6 @@ class Cart:
             if item.product.product_id == product.product_id:
                 item.quantity += quantity
             return
-    # Якщо немає — додаємо новий
         self.items.append(CartItem(product, quantity))
 
     def __len__(self) -> int:
