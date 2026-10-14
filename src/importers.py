@@ -22,13 +22,14 @@ def read_products(path: Path) -> Iterator[Product]:
         for row in reader:
             line = reader.line_num
             try:
+                currency = row.get("currency", "UAH")
                 yield Product(
                     product_id=int(row["product_id"]),
                     name=row["name"],
                     category=row["category"],
-                    price=Money(float(row["price"])),
+                    price=Money(float(row["price"]), currency), # Обязательно передаем валюту!
                     quantity=int(row["quantity"]),
-                )
+                )   
             except (ValueError, TypeError) as error:
                 raise DataImportError(
                     f"Invalid record at line {line}: {error}", line=line

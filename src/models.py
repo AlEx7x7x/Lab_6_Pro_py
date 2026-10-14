@@ -46,11 +46,14 @@ class Cart:
     items: list[CartItem] = field(default_factory=list)
 
     def add(self, product: Product, quantity: int = 1) -> None:
-    # Шукаємо, чи є вже такий товар у кошику
+    # Валидация должна происходить до любых изменений
+        if quantity <= 0:
+            raise ValueError("Quantity must be positive")
+        
         for item in self.items:
             if item.product.product_id == product.product_id:
                 item.quantity += quantity
-            return
+                return
         self.items.append(CartItem(product, quantity))
 
     def __len__(self) -> int:

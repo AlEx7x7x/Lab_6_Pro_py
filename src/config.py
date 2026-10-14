@@ -26,12 +26,16 @@ def get_min_stock() -> int:
 
 
 def load_config(path: Path) -> dict:
-    """Читає YAML-конфігурацію; відсутні ключі беруться зі значень за замовчуванням."""
     if not path.exists():
         raise FileNotFoundError(f"Config not found: {path}")
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    
+    min_stock = data.get("min_stock")
+    currency = data.get("currency")
+    categories = data.get("categories")
+    
     return {
-        "min_stock": int(data.get("min_stock", DEFAULT_MIN_STOCK)),
-        "currency": str(data.get("currency", "UAH")),
-        "categories": list(data.get("categories") or []),
+        "min_stock": int(min_stock) if min_stock is not None else DEFAULT_MIN_STOCK,
+        "currency": str(currency) if currency is not None else "UAH",
+        "categories": list(categories) if categories is not None else [],
     }
